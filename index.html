@@ -1,22 +1,310 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Interactive Quiz</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title></title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#111;
+      --muted:#444;
+      --accent:#0057b7; /* blue for answers (accessible) */
+      --card:#f7f9fc;
+      --border:#e1e6ee;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{
+      margin:0;
+      padding:2rem;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    header h1{
+      margin:0 0 .25rem 0;
+      font-size:1.4rem;
+    }
+    header p{
+      margin:.25rem 0 1rem 0;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    section.rule{
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:1rem;
+      border-radius:8px;
+      margin-bottom:1.25rem;
+    }
+    h2, h3{
+      margin:.5rem 0;
+    }
+    ul{
+      margin:.25rem 0 0.75rem 1.1rem;
+    }
+    li{ margin:.35rem 0; }
+    .table{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:.5rem 1rem;
+      align-items:start;
+    }
+    .table > div{
+      background:transparent;
+      padding:.25rem 0;
+    }
+    .note{
+      font-size:.95rem;
+      color:var(--muted);
+    }
+
+    /* Exercise layout */
+    .exercise{
+      margin-top:1rem;
+      border:1px solid var(--border);
+      padding:1rem;
+      border-radius:8px;
+      background:#fff;
+    }
+    .item{
+      margin-bottom:1rem;
+      padding:.5rem;
+      border-radius:6px;
+      background:linear-gradient(180deg,#ffffff, #fbfdff);
+      border:1px solid #f0f4f9;
+    }
+    .direct{
+      font-weight:600;
+      color:var(--text);
+      margin-bottom:.4rem;
+    }
+    .direct .quote{
+      display:block;
+      margin-top:.25rem;
+      font-style:italic;
+      color:#222;
+    }
+    label{
+      display:block;
+      margin:.4rem 0 .25rem 0;
+      font-weight:600;
+      font-size:.95rem;
+    }
+    textarea{
+      width:100%;
+      min-height:3.2rem;
+      padding:.5rem;
+      font-size:1rem;
+      border:1px solid var(--border);
+      border-radius:6px;
+      resize:vertical;
+      box-sizing:border-box;
+      background:#fff;
+      color:var(--text);
+    }
+    .answer{
+      display:inline-block;
+      margin-top:.45rem;
+      color:var(--accent);
+      font-weight:700;
+      background:rgba(0,87,183,0.05);
+      padding:.25rem .5rem;
+      border-radius:4px;
+    }
+    .help{
+      font-size:.9rem;
+      color:var(--muted);
+      margin-top:.35rem;
+    }
+    footer{
+      margin-top:1.25rem;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    /* Accessibility: focus styles */
+    textarea:focus{
+      outline:3px solid rgba(0,87,183,0.15);
+      border-color:var(--accent);
+    }
+
+    /* Make long lines wrap nicely */
+    .direct, .quote, .answer { word-wrap:break-word; }
+  </style>
 </head>
 <body>
-  <h1>HTML Basics Quiz</h1>
-  <form id="quiz-form">
-    <div>
-      <p>1. What does HTML stand for?</p>
-      <input type="radio" name="q1" value="a"> Home Tool Markup Language<br>
-      <input type="radio" name="q1" value="b"> HyperText Markup Language<br>
-      <input type="radio" name="q1" value="c"> Hyperlink Text Management Language<br>
-    </div>
-    <button type="button" onclick="submitQuiz()">Submit</button>
-  </form>
-  <div id="result"></div>
+  <header>
+    <h1>Reported Speech — Quick rules and exercise</h1>
+    <p>Below are the general rules for converting direct speech into reported speech (also called indirect speech). Type your answers in the boxes</p>
+  </header>
 
-  <script src="script.js"></script>
+  <section class="rule" aria-labelledby="rules-heading">
+    <h2 id="rules-heading">General rules for converting direct speech into reported speech</h2>
+
+    <h3>Tense backshift (when the reporting verb is in the past)</h3>
+    <div class="table" role="table" aria-label="Tense backshift table">
+      <div><strong>Direct speech tense</strong></div>
+      <div><strong>Reported speech tense (step back)</strong></div>
+
+      <div>Present simple (e.g., <em>I eat</em>)</div>
+      <div>Past simple (e.g., <em>he said he ate</em>)</div>
+
+      <div>Present continuous (e.g., <em>I am eating</em>)</div>
+      <div>Past continuous (e.g., <em>he said he was eating</em>)</div>
+
+      <div>Present perfect (e.g., <em>I have eaten</em>)</div>
+      <div>Past perfect (e.g., <em>he said he had eaten</em>)</div>
+
+      <div>Past simple (e.g., <em>I ate</em>)</div>
+      <div>Past perfect (often) (e.g., <em>he said he had eaten</em>)</div>
+
+      <div>Past continuous (e.g., <em>I was eating</em>)</div>
+      <div>Past perfect continuous (e.g., <em>he said he had been eating</em>)</div>
+
+      <div>Will (future) (e.g., <em>I will go</em>)</div>
+      <div>Would (e.g., <em>he said he would go</em>)</div>
+    </div>
+
+    <p class="note"><strong>Exceptions:</strong> If the reporting verb is in the present (e.g., <em>He says</em>), backshift is not required. If the reported fact is still true or time references remain valid, speakers sometimes do not backshift.</p>
+
+    <h3>Common word changes (time, place, pronouns, question words)</h3>
+    <ul>
+      <li><strong>Pronouns</strong> change to match the new subject: <em>"I" → "he/she"; "you" → "I/they/he/she" depending on context</em>.</li>
+      <li><strong>Time/place words</strong> often change: <em>now → then; today → that day; yesterday → the day before; tomorrow → the next day; here → there; this → that; these → those</em>.</li>
+      <li><strong>Question form</strong> (yes/no questions): use <em>if/whether</em> + statement word order (no auxiliary inversion). Example: <em>"Do you like it?" → He asked if I liked it.</em></li>
+      <li><strong>Wh-questions</strong> keep the question word but change word order to a statement: <em>"What is your name?" → He asked what my name was.</em></li>
+      <li><strong>Imperatives</strong> (commands/requests): use <em>told/asked + object + to + infinitive</em>. Example: <em>"Pick a card." → He told her to pick a card.</em></li>
+      <li><strong>Modal verbs</strong>: <em>can → could; may → might; must → had to; shall → should; will → would</em>.</li>
+    </ul>
+
+    <p class="note">Short example conversions</p>
+    <ul>
+      <li><strong>Direct:</strong> "What is your name?" — <strong>Reported:</strong> He asked what my name was.</li>
+      <li><strong>Direct:</strong> "Pick a card." — <strong>Reported:</strong> He told her to pick a card.</li>
+      <li><strong>Direct:</strong> "Have we ever met before?" — <strong>Reported:</strong> He asked if they had ever met before.</li>
+    </ul>
+  </section>
+
+  <section class="exercise" aria-labelledby="exercise-heading">
+    <h2 id="exercise-heading">Exercise — convert the direct speech into reported speech</h2>
+    <p class="help">Type your reported-speech sentence in the box below each direct sentence. The model answers are shown in blue beneath each box for quick self-checking.</p>
+
+    <!-- Item 1 -->
+    <div class="item" id="q1">
+      <div class="direct" aria-live="polite">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">She asks the audience member “what is your name?”</div>
+      </div>
+
+      <label for="a1">Your answer (reported speech):</label>
+      <textarea id="a1" name="a1" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">She asked the audience member</div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="item" id="q2">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">She says to Magda “pick a card, pick any card.”</div>
+      </div>
+
+      <label for="a2">Your answer (reported speech):</label>
+      <textarea id="a2" name="a2" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">She told Magda</div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="item" id="q3">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">Weronika then says, “please look at the card, but don't show me the card, memorise it, then place the card back in the deck.”</div>
+      </div>
+
+      <label for="a3">Your answer (reported speech):</label>
+      <textarea id="a3" name="a3" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">Weronika told her</div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="item" id="q4">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">She shows the card to Magda and asks her “was this the card you chose?”</div>
+      </div>
+
+      <label for="a4">Your answer (reported speech):</label>
+      <textarea id="a4" name="a4" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">She</div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="item" id="q5">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">Weronika asks the lady “have we ever met before?”</div>
+      </div>
+
+      <label for="a5">Your answer (reported speech):</label>
+      <textarea id="a5" name="a5" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">Weronika asked</div>
+    </div>
+
+    <!-- Item 6 -->
+    <div class="item" id="q6">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">Weronika then asks the lady “what is your name?”</div>
+      </div>
+
+      <label for="a6">Your answer (reported speech):</label>
+      <textarea id="a6" name="a6" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">Weronika then</div>
+    </div>
+
+    <!-- Item 7 -->
+    <div class="item" id="q7">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">Weronika then asks the lady “what is the name your parents gave you?”</div>
+      </div>
+
+      <label for="a7">Your answer (reported speech):</label>
+      <textarea id="a7" name="a7" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">Weronika then asked the lady</div>
+    </div>
+
+    <!-- Item 8 -->
+    <div class="item" id="q8">
+      <div class="direct">
+        <div><strong>Direct:</strong></div>
+        <div class="quote">Weronika asks Magda in a triumphant voice “is this an accurate reproduction of your face?”</div>
+      </div>
+
+      <label for="a8">Your answer (reported speech):</label>
+      <textarea id="a8" name="a8" placeholder="Type the reported sentence here..."></textarea>
+
+      <div class="help">Model answer:</div>
+      <div class="answer">Weronika then asked Magda</div>
+    </div>
+
+    <footer>
+      <p><strong></strong></p>
+    </footer>
+  </section>
 </body>
 </html>
